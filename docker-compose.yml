@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: petshop_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword  # Mật khẩu root của bạn
+      MYSQL_DATABASE: petshop             # Tự động tạo database này
+      MYSQL_USER: petuser                 # User cho app
+      MYSQL_PASSWORD: petpassword         # Mật khẩu cho user
+    ports:
+      - "3307:3306"                       # Map port ra máy host
+    volumes:
+      - mysql_data:/var/lib/mysql         # Lưu dữ liệu bền vững
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql_data:
